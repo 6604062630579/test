@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: quickbites_backend
+    ports:
+      - "3000:4000" # Mapping host port 3000 ไปยัง container port 4000
+    env_file:
+      - ./Backend/.env
+    depends_on:
+      - mongo
+    networks:
+      - quickbites-net
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: quickbites_frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    networks:
+      - quickbites-net
+
+  admin:
+    build:
+      context: ./Admin
+      dockerfile: Dockerfile
+    container_name: quickbites_admin
+    ports:
+      - "3002:80"
+    env_file:
+      - ./Admin/.env
+    depends_on:
+      - backend
+    networks:
+      - quickbites-net
+
+  mongo:
+    image: mongo:latest
+    container_name: quickbites_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - quickbites-net
+
+networks:
+  quickbites-net:
+
+volumes:
+  mongo_data:
