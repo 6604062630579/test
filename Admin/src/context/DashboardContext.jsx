@@ -27,7 +27,7 @@ const DashboardContextProvider = (props) => {
   const fecthAnalytics = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/order/list`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/analytics/get`,
         {
           params: { dateRange },
         }

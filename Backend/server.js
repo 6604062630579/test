@@ -13,11 +13,11 @@ import http from "http";
 import { Server } from "socket.io";
 
 const app = express();
+// ใช้ค่าจาก environment variable PORT ถ้ามี, ถ้าไม่มีก็ใช้ 4000
 const port = process.env.PORT || 4000;
 
 const server = http.createServer(app);
 
-// ตั้งค่า Socket.io พร้อมกำหนด CORS ให้รองรับทั้ง production และ local origins
 const io = new Server(server, {
   cors: {
     origin: [
@@ -34,12 +34,14 @@ const io = new Server(server, {
   debug: true,
 });
 
+// เชื่อมต่อ MongoDB และ Cloudinary
 connectDB(io);
 connectCloudinary();
 
 app.use(express.json());
 app.use(cors());
 
+// กำหนด routes
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/order", orderRouter);
@@ -48,13 +50,11 @@ app.use("/api/analytics", analyticsRouter);
 app.use("/api/table", tableRouter);
 
 io.on("connection", (socket) => {
-  console.log(`A user connected : ${socket.id}`);
-
+  console.log(`A user connected: ${socket.id}`);
   socket.on("message", (data) => {
     console.log("Message received:", data);
     socket.emit("messageResponse", "Message received");
   });
-
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
@@ -64,6 +64,6 @@ app.get("/", (req, res) => {
   res.send("API IS WORKING");
 });
 
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);
 });

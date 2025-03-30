@@ -104,7 +104,10 @@ const Table = () => {
         }
       );
 
-      await axios.post(+"/api/table/clear", { table: tableNumber });
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/table/clear`, {
+        table: tableNumber,
+      });
+
       if (response.data.success) {
         toast.success(response.data.message);
         setOrders([]);

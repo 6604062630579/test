@@ -2,12 +2,10 @@ version: "3.8"
 
 services:
   backend:
-    build:
-      context: ./Backend
-      dockerfile: Dockerfile
+    image: quickbitesacr.azurecr.io/quickbites_backend:latest
     container_name: quickbites_backend
     ports:
-      - "3000:4000" # Mapping host port 3000 ไปยัง container port 4000
+      - "3000:4000" # Host port 3000 => container port 4000
     env_file:
       - ./Backend/.env
     depends_on:
@@ -16,9 +14,7 @@ services:
       - quickbites-net
 
   frontend:
-    build:
-      context: ./Frontend
-      dockerfile: Dockerfile
+    image: quickbitesacr.azurecr.io/quickbites_frontend:latest
     container_name: quickbites_frontend
     ports:
       - "3001:80"
@@ -28,9 +24,7 @@ services:
       - quickbites-net
 
   admin:
-    build:
-      context: ./Admin
-      dockerfile: Dockerfile
+    image: quickbitesacr.azurecr.io/quickbites_admin:latest
     container_name: quickbites_admin
     ports:
       - "3002:80"

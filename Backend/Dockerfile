@@ -1,20 +1,16 @@
-# ใช้ Node.js แบบ Alpine สำหรับ image ที่เบา
 FROM node:18-alpine
 
-# กำหนด working directory
 WORKDIR /app
 
-# Copy package.json และ package-lock.json (ถ้ามี) ลงไปก่อน
+# คัดลอก package.json และติดตั้ง dependencies
 COPY package*.json ./
+RUN npm install --production
 
-# ติดตั้ง dependencies
-RUN npm install
-
-# Copy โค้ดทั้งหมด
+# คัดลอกโค้ดทั้งหมด
 COPY . .
 
-# เปิด port 3000 (ใช้สำหรับรันเซิร์ฟเวอร์)
-EXPOSE 3000
+# เปิด port 4000 (ให้สอดคล้องกับค่าที่ app ใช้)
+EXPOSE 4000
 
-# รันคำสั่ง start ตามที่ระบุใน package.json
-CMD ["npm", "run", "server"]
+# รันคำสั่ง production (ใช้ npm start เพื่อรัน server.js โดยที่ script "start" ใน package.json ใช้ "node server.js")
+CMD ["npm", "start"]
